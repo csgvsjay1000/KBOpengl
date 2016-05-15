@@ -27,6 +27,8 @@
 		4C4F73F41CE57CE8004AECC7 /* NSLayoutConstraint+MASDebugAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4F73E61CE57CE8004AECC7 /* NSLayoutConstraint+MASDebugAdditions.m */; };
 		4C4F73F51CE57CE8004AECC7 /* View+MASAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4F73E81CE57CE8004AECC7 /* View+MASAdditions.m */; };
 		4C4F73F61CE57CE8004AECC7 /* ViewController+MASAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4F73EB1CE57CE8004AECC7 /* ViewController+MASAdditions.m */; };
+		4C533BC91CE84E9E005D237A /* Vertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 4C533BC81CE84E9E005D237A /* Vertex.glsl */; };
+		4C533BCB1CE84EBE005D237A /* Frag.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 4C533BCA1CE84EBE005D237A /* Frag.glsl */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -91,6 +93,8 @@
 		4C4F73E91CE57CE8004AECC7 /* View+MASShorthandAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "View+MASShorthandAdditions.h"; sourceTree = "<group>"; };
 		4C4F73EA1CE57CE8004AECC7 /* ViewController+MASAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ViewController+MASAdditions.h"; sourceTree = "<group>"; };
 		4C4F73EB1CE57CE8004AECC7 /* ViewController+MASAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ViewController+MASAdditions.m"; sourceTree = "<group>"; };
+		4C533BC81CE84E9E005D237A /* Vertex.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Vertex.glsl; sourceTree = "<group>"; };
+		4C533BCA1CE84EBE005D237A /* Frag.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Frag.glsl; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -147,6 +151,8 @@
 				4C4F73A21CE578CA004AECC7 /* ViewController.m */,
 				4C4F73CE1CE57BE3004AECC7 /* KBOpenglView.h */,
 				4C4F73CF1CE57BE3004AECC7 /* KBOpenglView.m */,
+				4C533BC81CE84E9E005D237A /* Vertex.glsl */,
+				4C533BCA1CE84EBE005D237A /* Frag.glsl */,
 				4C4F73A41CE578CA004AECC7 /* Main.storyboard */,
 				4C4F73A71CE578CA004AECC7 /* Assets.xcassets */,
 				4C4F73A91CE578CA004AECC7 /* LaunchScreen.storyboard */,
@@ -322,7 +328,9 @@
 				4C4F73EC1CE57CE8004AECC7 /* Info.plist in Resources */,
 				4C4F73AB1CE578CA004AECC7 /* LaunchScreen.storyboard in Resources */,
 				4C4F73A81CE578CA004AECC7 /* Assets.xcassets in Resources */,
+				4C533BCB1CE84EBE005D237A /* Frag.glsl in Resources */,
 				4C4F73A61CE578CA004AECC7 /* Main.storyboard in Resources */,
+				4C533BC91CE84E9E005D237A /* Vertex.glsl in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
