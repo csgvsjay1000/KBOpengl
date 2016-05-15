@@ -16,6 +16,7 @@
 
 @property(nonatomic,assign)GLuint framebuffer;
 @property(nonatomic,assign)GLuint renderbuffer;
+@property(nonatomic,assign)GLuint shaderProgram;
 
 @end
 
@@ -45,6 +46,7 @@
     eaglLayer.drawableProperties = @{ kEAGLDrawablePropertyRetainedBacking :[NSNumber numberWithBool:NO],kEAGLDrawablePropertyColorFormat : kEAGLColorFormatRGBA8};
     _context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
     [EAGLContext setCurrentContext:_context];
+    [self loadShader];
     
 }
 
@@ -102,18 +104,51 @@
 #pragma mark - private methods
 -(BOOL)loadShader{
     
-    GLuint vertexShader;
-    vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    const char *vertexShaderSource = "";
-    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-    glCompileShader(vertexShader);
+    GLuint vertexShader,fragShader;
+    NSURL *vertShaderURL, *fragShaderURL;
+    vertShaderURL = [[NSBundle mainBundle] URLForResource:@"Vertex" withExtension:@"glsl"];
+    fragShaderURL = [[NSBundle mainBundle] URLForResource:@"Frag" withExtension:@"glsl"];
+
+    if (![self compileShader:&vertexShader type:GL_VERTEX_SHADER url:vertShaderURL]) {
+        NSLog(@"Failed to compile vertex shader");
+        return NO;
+    }
+    if (![self compileShader:&fragShader type:GL_FRAGMENT_SHADER url:fragShaderURL]) {
+        NSLog(@"Failed to compile fragment shader");
+        return NO;
+    }
+    
+    self.shaderProgram = glCreateProgram();
+    glAttachShader(_shaderProgram, vertexShader);
+    glAttachShader(_shaderProgram, fragShader);
+    glLinkProgram(_shaderProgram);
+    
+    
+    
+    return YES;
+}
+
+-(BOOL)compileShader:(GLuint *)shader type:(GLenum)type url:(NSURL *)url{
+    
+    *shader = glCreateShader(type);
+    NSError *error;
+    NSString *sourceString = [[NSString alloc] initWithContentsOfURL:url encoding:NSUTF8StringEncoding error:&error];
+    if (sourceString == nil) {
+        NSLog(@"Failed to load shader: %@", [error localizedDescription]);
+        return NO;
+    }
+    const GLchar *vertexShaderSource = [sourceString UTF8String];
+    glShaderSource(*shader, 1, &vertexShaderSource, NULL);
+    glCompileShader(*shader);
     
     GLint success;
     GLchar infoLog[512];
-    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+    glGetShaderiv(*shader, GL_COMPILE_STATUS, &success);
     if (!success) {
-        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+        glGetShaderInfoLog(*shader, 512, NULL, infoLog);
         printf("%s\n",infoLog);
+        glDeleteShader(*shader);
+        return NO;
     }
     
     
