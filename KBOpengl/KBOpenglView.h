@@ -10,4 +10,6 @@
 
 @interface KBOpenglView : UIView
 
+-(void)render;
+
 @end

@@ -1,4 +1,9 @@
 attribute vec3 position;
+attribute vec3 color;
+attribute vec2 texCoord;
+
+varying vec2 texCoordVarying;
+varying vec3 colorVarying;
 
 void main()
 {
