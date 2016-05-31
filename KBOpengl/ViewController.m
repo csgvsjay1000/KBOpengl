@@ -7,12 +7,18 @@
 //
 
 #import "ViewController.h"
-#import "KBOpenglView.h"
+//#import "KBOpenglView.h"
 #import "Masonry.h"
+#import "KBOpenglView2_0.h"
 
 @interface ViewController ()
 
-@property(nonatomic,strong)KBOpenglView *openglView;
+//@property(nonatomic,strong)KBOpenglView *openglView;
+@property(nonatomic,strong)CADisplayLink *disLink;
+
+@property(nonatomic,strong)KBOpenglView2_0 *openglView;
+
+
 
 @end
 
@@ -26,6 +32,11 @@
     [self.view addSubview:self.openglView];
     
     [self layoutSubPages];
+    
+    _disLink = [CADisplayLink displayLinkWithTarget:self.openglView selector:@selector(render)];
+    _disLink.paused = YES;
+    _disLink.frameInterval = 8;
+    [_disLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 }
 
 -(void)layoutSubPages{
@@ -39,7 +50,9 @@
 }
 
 -(void)viewDidAppear:(BOOL)animated{
-    [_openglView render];
+//    [_openglView render];
+    _disLink.paused = NO;
+
 }
 
 - (void)didReceiveMemoryWarning {
@@ -49,9 +62,9 @@
 
 
 #pragma mark - setters and getters
--(KBOpenglView *)openglView{
+-(KBOpenglView2_0 *)openglView{
     if (_openglView == nil) {
-        _openglView = [[KBOpenglView alloc] init];
+        _openglView = [[KBOpenglView2_0 alloc] init];
     }
     return _openglView;
 }

@@ -11,16 +11,20 @@
 #import <OpenGLES/ES2/glext.h>
 #import <GLKit/GLKit.h>
 
+
+
 const NSInteger kVertex = 0;  //顶点坐标
 const NSInteger kTextureCoord = 1;  //纹理坐标
 
+#define RADIANS_TO_DEGREES(radians) ((radians) * (180.0 / M_PI))
+#define DEGREES_TO_RADIANS(angle) ((angle) / 180.0 * M_PI)
 
 GLfloat vertices[] = {
     //  ---- 位置 ----     ---- 颜色 ----  ---- 纹理坐标 ----
-    0.8f, 0.8f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,  // 右上
-    0.8f, -0.8f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // 右下
-    -0.8f, -0.8f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,// 左下
-    -0.8f, 0.8f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // 左上
+    0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,  // 右上
+    0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // 右下
+    -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,// 左下
+    -0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // 左上
 };
 
 GLuint indices[] = { // 起始于0!
@@ -32,6 +36,9 @@ GLuint indices[] = { // 起始于0!
 @interface KBOpenglView (){
     GLuint _textureUniform;
     GLuint _textureUniform_2;
+    
+    GLuint _transformLocation;
+    
 
 }
 
@@ -214,8 +221,45 @@ GLuint indices[] = { // 起始于0!
     
     
     
-//    glClearColor(255, 255, 255, 1);
-//    glClear(GL_COLOR_BUFFER_BIT);
+    glClearColor(0, 0, 0, 1);
+    glClear(GL_COLOR_BUFFER_BIT);
+    
+    GLKMatrix4 model = GLKMatrix4Identity;
+    GLKMatrix4 view = GLKMatrix4Identity;
+    GLKMatrix4 projection = GLKMatrix4Identity;
+    
+    model =  GLKMatrix4Rotate(model, DEGREES_TO_RADIANS(-55), 1, 0, 0);
+//    view = GLKMatrix4Translate(view, 0, 0, -3.0f);
+    
+    // eye x,y,z    target x,y,z
+    
+    static int posZ = 0;
+    GLfloat radius = 3.0f;
+    
+    static BOOL up = YES;
+    if (up) {
+        posZ = posZ+1;
+    }else{
+        posZ = posZ -1;
+    }
+    if (posZ >=10) {
+        up = NO;
+    }
+    if (posZ<=-10) {
+        up = YES;
+    }
+    GLfloat camX = sin([NSDate timeIntervalSinceReferenceDate]) * radius;
+    GLfloat camZ = cos([NSDate timeIntervalSinceReferenceDate]) * radius;
+    
+    view = GLKMatrix4MakeLookAt(camX, 0, camZ, 0, 0, 0, 0, 1, 0);
+    
+    
+    projection = GLKMatrix4MakePerspective(DEGREES_TO_RADIANS(45), 0.5, 0.1, 400.0);
+    
+    GLKMatrix4 trans = GLKMatrix4Multiply(view,model);
+    trans = GLKMatrix4Multiply(projection,trans);
+    
+    glUniformMatrix4fv(_transformLocation, 1, GL_FALSE, (const GLfloat* )(&trans));
     
     glViewport(0, 0, self.frame.size.width, self.frame.size.height);
 //    glDrawArrays(GL_TRIANGLES, 0, 3);
@@ -260,6 +304,9 @@ GLuint indices[] = { // 起始于0!
     
     _textureUniform = glGetUniformLocation(_shaderProgram, "ourTexture");
     _textureUniform_2 = glGetUniformLocation(_shaderProgram, "ourTexture_2");
+    
+    _transformLocation = glGetUniformLocation(_shaderProgram, "transform");
+
 
     return YES;
 }
