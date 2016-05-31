@@ -30,6 +30,7 @@
 		4C4F73F61CE57CE8004AECC7 /* ViewController+MASAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4F73EB1CE57CE8004AECC7 /* ViewController+MASAdditions.m */; };
 		4C533BC91CE84E9E005D237A /* Vertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 4C533BC81CE84E9E005D237A /* Vertex.glsl */; };
 		4C533BCB1CE84EBE005D237A /* Frag.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 4C533BCA1CE84EBE005D237A /* Frag.glsl */; };
+		4C7020EC1CFD69D100EA16D4 /* test1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4C7020EB1CFD69D100EA16D4 /* test1.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -97,6 +98,7 @@
 		4C4F73EB1CE57CE8004AECC7 /* ViewController+MASAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ViewController+MASAdditions.m"; sourceTree = "<group>"; };
 		4C533BC81CE84E9E005D237A /* Vertex.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Vertex.glsl; sourceTree = "<group>"; };
 		4C533BCA1CE84EBE005D237A /* Frag.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Frag.glsl; sourceTree = "<group>"; };
+		4C7020EB1CFD69D100EA16D4 /* test1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = test1.jpg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -153,6 +155,7 @@
 				4C4F73A21CE578CA004AECC7 /* ViewController.m */,
 				4C4F73CE1CE57BE3004AECC7 /* KBOpenglView.h */,
 				4C4F73CF1CE57BE3004AECC7 /* KBOpenglView.m */,
+				4C7020EB1CFD69D100EA16D4 /* test1.jpg */,
 				4C441BE91CE9B541007259B7 /* wall.jpg */,
 				4C533BC81CE84E9E005D237A /* Vertex.glsl */,
 				4C533BCA1CE84EBE005D237A /* Frag.glsl */,
@@ -329,6 +332,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C4F73EC1CE57CE8004AECC7 /* Info.plist in Resources */,
+				4C7020EC1CFD69D100EA16D4 /* test1.jpg in Resources */,
 				4C4F73AB1CE578CA004AECC7 /* LaunchScreen.storyboard in Resources */,
 				4C4F73A81CE578CA004AECC7 /* Assets.xcassets in Resources */,
 				4C533BCB1CE84EBE005D237A /* Frag.glsl in Resources */,

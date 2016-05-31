@@ -11,14 +11,16 @@
 #import <OpenGLES/ES2/glext.h>
 #import <GLKit/GLKit.h>
 
-const NSInteger kVertex = 0;
+const NSInteger kVertex = 0;  //顶点坐标
+const NSInteger kTextureCoord = 1;  //纹理坐标
+
 
 GLfloat vertices[] = {
     //  ---- 位置 ----     ---- 颜色 ----  ---- 纹理坐标 ----
-    0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,  // 右上
-    0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // 右下
-    -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,// 左下
-    -0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // 左上
+    0.8f, 0.8f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,  // 右上
+    0.8f, -0.8f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // 右下
+    -0.8f, -0.8f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,// 左下
+    -0.8f, 0.8f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // 左上
 };
 
 GLuint indices[] = { // 起始于0!
@@ -27,7 +29,11 @@ GLuint indices[] = { // 起始于0!
     1, 2, 3  // 第二个三角形
 };
 
-@interface KBOpenglView ()
+@interface KBOpenglView (){
+    GLuint _textureUniform;
+    GLuint _textureUniform_2;
+
+}
 
 @property(nonatomic,strong)EAGLContext *context;
 
@@ -81,8 +87,11 @@ GLuint indices[] = { // 起始于0!
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
     
-    glVertexAttribPointer(kVertex, 3, GL_FLOAT, GL_FALSE, 3*sizeof(GL_FLOAT), 0);
+    glVertexAttribPointer(kVertex, 3, GL_FLOAT, GL_FALSE, 8*sizeof(GL_FLOAT), 0);
     glEnableVertexAttribArray(kVertex);
+    
+    glVertexAttribPointer(kTextureCoord, 2, GL_FLOAT, GL_FALSE, 8*sizeof(GL_FLOAT), (const GLvoid*)(6*sizeof(GL_FLOAT)));
+    glEnableVertexAttribArray(kTextureCoord);
     
     glGenBuffers(1, &EBO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
@@ -91,14 +100,77 @@ GLuint indices[] = { // 起始于0!
     GLuint texture;
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
+    glActiveTexture(GL_TEXTURE0);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// Set texture wrapping to GL_REPEAT (usually basic wrapping method)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    void *bitmapData;
+    size_t pixelsWide;
+    size_t pixelsHigh;
+    [self loadImageWithName:@"test1" bitmapData_p:&bitmapData pixelsWide:&pixelsWide pixelsHigh:&pixelsHigh];
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (int)pixelsWide, (int)pixelsHigh, 0, GL_RGBA, GL_UNSIGNED_BYTE, bitmapData);
+    free(bitmapData);
+    bitmapData = NULL;
+
+    glBindTexture(GL_TEXTURE_2D, 0);
     
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"wall" ofType:@"jpg"];
-    NSData *data = [NSData dataWithContentsOfFile:path];
     
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 512, 512, 0, GL_RGB, GL_UNSIGNED_BYTE, [data bytes]);
+    GLuint texture_2;
+    glGenTextures(1, &texture_2);
+    glBindTexture(GL_TEXTURE_2D, texture_2);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// Set texture wrapping to GL_REPEAT (usually basic wrapping method)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     
-    
+    void *bitmapData_2;
+    size_t pixelsWide_2;
+    size_t pixelsHigh_2;
+    [self loadImageWithName:@"wall" bitmapData_p:&bitmapData_2 pixelsWide:&pixelsWide_2 pixelsHigh:&pixelsHigh_2];
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (int)pixelsWide_2, (int)pixelsHigh_2, 0, GL_RGBA, GL_UNSIGNED_BYTE, bitmapData_2);
+    free(bitmapData_2);
+    bitmapData_2 = NULL;
+    glBindTexture(GL_TEXTURE_2D, 0);
+
     glUseProgram(_shaderProgram);
+    
+    glActiveTexture(GL_TEXTURE5);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glUniform1i(_textureUniform, 5);
+    
+    glActiveTexture(GL_TEXTURE6);
+    glBindTexture(GL_TEXTURE_2D, texture_2);
+    glUniform1i(_textureUniform_2, 6);
+
+}
+
+-(void)loadImageWithName:(NSString *)name bitmapData_p:(void **)bitmapData pixelsWide:(size_t *)pixelsWide_p pixelsHigh:(size_t *)pixelsHigh_p{
+    NSString *path = [[NSBundle mainBundle] pathForResource:name ofType:@"jpg"];
+    
+    UIImage *image = [[UIImage alloc] initWithContentsOfFile:path];
+    
+    CGImageRef cgimg = image.CGImage;
+    
+    CGContextRef context = NULL;
+    size_t pixelsWide;
+    size_t pixelsHigh;
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    pixelsWide = CGImageGetWidth(cgimg);
+    pixelsHigh = CGImageGetHeight(cgimg);
+    
+    size_t bitmapBytesPerRow_t =  CGImageGetBytesPerRow(cgimg);
+    size_t bitsPerComponent_t = CGImageGetBitsPerComponent(cgimg);
+    *bitmapData = malloc(bitmapBytesPerRow_t*pixelsHigh);
+    context = CGBitmapContextCreate(*bitmapData, pixelsWide, pixelsHigh, bitsPerComponent_t, bitmapBytesPerRow_t, colorSpace, kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
+    CGContextDrawImage(context, CGRectMake(0, 0, pixelsWide, pixelsHigh), cgimg);
+    
+    CGContextRelease(context);
+    
+    *pixelsHigh_p = pixelsHigh;
+    *pixelsWide_p = pixelsWide;
 }
 
 -(void)layoutSubviews{
@@ -175,6 +247,7 @@ GLuint indices[] = { // 起始于0!
     glAttachShader(_shaderProgram, fragShader);
     
     glBindAttribLocation(_shaderProgram, kVertex, "position");
+    glBindAttribLocation(_shaderProgram, kTextureCoord, "texCoord");
     
     glLinkProgram(_shaderProgram);
     
@@ -184,6 +257,10 @@ GLuint indices[] = { // 起始于0!
     if (fragShader) {
         glDeleteShader(fragShader);
     }
+    
+    _textureUniform = glGetUniformLocation(_shaderProgram, "ourTexture");
+    _textureUniform_2 = glGetUniformLocation(_shaderProgram, "ourTexture_2");
+
     return YES;
 }
 
