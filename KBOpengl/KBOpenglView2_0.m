@@ -140,6 +140,7 @@ const NSInteger kVertex = 0;  //顶点坐标
     [EAGLContext setCurrentContext:_context];
     [self loadShader];
     [self doInitBuffers];
+    glEnable(GL_DEPTH_TEST);
 }
 
 -(void)doInitBuffers{
@@ -163,10 +164,22 @@ const NSInteger kVertex = 0;  //顶点坐标
 -(void)render{
     
     glClearColor(0, 0, 0, 1);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
     glUniform3f(_objectColorLocation, 1.0f, 0.5f, 0.31f);
     glUniform3f(_lightColorLocation,  1.0f, 0.5f, 1.0f);
+    
+    GLKMatrix4 model = GLKMatrix4Identity;
+    GLKMatrix4 view = GLKMatrix4Identity;
+    GLKMatrix4 projection = GLKMatrix4Identity;
+    
+//    model =  GLKMatrix4Rotate(model, GLKMathDegreesToRadians(-55), 1, 0, 0);
+//    view = GLKMatrix4MakeLookAt(0, 0, -3, 0, 0, 0, 0, 1, 0);
+//    
+//    projection = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(45), 0.5, 0.1, 400.0);
+    GLKMatrix4 trans = GLKMatrix4Multiply(view,model);
+    trans = GLKMatrix4Multiply(projection,trans);
+    glUniformMatrix4fv(_transformLocation, 1, GL_FALSE, (const GLfloat* )(&trans));
     
     glViewport(0, 0, self.frame.size.width, self.frame.size.height);
     glDrawArrays(GL_TRIANGLES, 0, 36);

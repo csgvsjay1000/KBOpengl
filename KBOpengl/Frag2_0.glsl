@@ -1,6 +1,6 @@
 
-uniform vec3 objectColor;
-uniform vec3 lightColor;
+uniform highp vec3 objectColor;
+uniform highp vec3 lightColor;
 
 
 void main()

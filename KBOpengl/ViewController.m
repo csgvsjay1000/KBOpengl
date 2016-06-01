@@ -7,16 +7,18 @@
 //
 
 #import "ViewController.h"
-//#import "KBOpenglView.h"
 #import "Masonry.h"
-#import "KBOpenglView2_0.h"
+
+//#import "KBOpenglView.h"
+//#import "KBOpenglView2_0.h"
+#import "KBOpenglView3_0.h"
 
 @interface ViewController ()
 
 //@property(nonatomic,strong)KBOpenglView *openglView;
 @property(nonatomic,strong)CADisplayLink *disLink;
 
-@property(nonatomic,strong)KBOpenglView2_0 *openglView;
+@property(nonatomic,strong)KBOpenglView3_0 *openglView;
 
 
 
@@ -41,11 +43,7 @@
 
 -(void)layoutSubPages{
     [_openglView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.view).offset(10);
-        make.bottom.equalTo(self.view).offset(-10);
-        make.left.equalTo(self.view).offset(10);
-        make.right.equalTo(self.view).offset(-10);
-
+        make.top.bottom.left.right.equalTo(self.view);
     }];
 }
 
@@ -62,9 +60,9 @@
 
 
 #pragma mark - setters and getters
--(KBOpenglView2_0 *)openglView{
+-(KBOpenglView3_0 *)openglView{
     if (_openglView == nil) {
-        _openglView = [[KBOpenglView2_0 alloc] init];
+        _openglView = [[KBOpenglView3_0 alloc] init];
     }
     return _openglView;
 }
