@@ -11,14 +11,15 @@
 
 //#import "KBOpenglView.h"
 //#import "KBOpenglView2_0.h"
-#import "KBOpenglView3_0.h"
+//#import "KBOpenglView3_0.h"
+#import "KBOpenglView5_0.h"
 
 @interface ViewController ()
 
 //@property(nonatomic,strong)KBOpenglView *openglView;
 @property(nonatomic,strong)CADisplayLink *disLink;
 
-@property(nonatomic,strong)KBOpenglView3_0 *openglView;
+@property(nonatomic,strong)KBOpenglView5_0 *openglView;
 
 
 
@@ -60,9 +61,9 @@
 
 
 #pragma mark - setters and getters
--(KBOpenglView3_0 *)openglView{
+-(KBOpenglView5_0 *)openglView{
     if (_openglView == nil) {
-        _openglView = [[KBOpenglView3_0 alloc] init];
+        _openglView = [[KBOpenglView5_0 alloc] initWithFrame:self.view.bounds];
     }
     return _openglView;
 }
